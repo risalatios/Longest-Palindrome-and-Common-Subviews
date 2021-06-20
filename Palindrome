@@ -1,0 +1,104 @@
+import UIKit
+
+func getCommonSuperviews(with firstView:UIView, and secondView: UIView) -> UIView? {
+    var currentView = firstView.superview
+    var otherView = secondView.superview
+    firstView.tag = -1  // -1 means this node is visited.
+    
+    while currentView != nil {
+        firstView.superview?.tag = -1  // -1 means this node is visited.
+        currentView = currentView?.superview
+    }
+    
+    if secondView.tag == -1 { return secondView }
+    
+    while otherView != nil {
+        // if view is visited before then return view
+        guard otherView?.tag != -1 else { return otherView }
+        otherView = otherView?.superview
+    }
+    
+    return nil
+}
+
+
+let v = UIView()
+let l3 = UILabel()
+v.addSubview(l3)
+let l4 = UILabel()
+v.addSubview(l4)
+
+let l5 = UIView()
+
+
+
+
+
+
+if let v = getCommonSuperviews(with: l3, and: l5) {
+    //print(v)
+} else {
+    //print("no coomon")
+}
+
+
+// --Longest Palindromic Substring
+
+
+extension String {
+    subscript(i: Int) -> Character {
+        let index = self.index(self.startIndex, offsetBy: i)
+        return self[index]
+    }
+    
+    subscript (r: Range<Int>) -> String {
+        let start = index(startIndex, offsetBy: r.lowerBound)
+        let end = index(startIndex, offsetBy: r.upperBound)
+        return String(self[start ..< end])
+    }
+    
+    subscript (r: CountableClosedRange<Int>) -> String {
+        let startIndex =  self.index(self.startIndex, offsetBy: r.lowerBound)
+        let endIndex = self.index(startIndex, offsetBy: r.upperBound - r.lowerBound)
+        return String(self[startIndex...endIndex])
+    }
+
+}
+
+extension String {
+    func getIndex(offSet: Int)-> String.Index {
+        return self.index(self.startIndex, offsetBy:offSet )
+    }
+    
+}
+
+
+var resultStart = 0
+var resultLength = 0
+
+func getPalindromeSubString(from str: String) -> String {
+    if str.count < 2 {
+        return str
+    }
+    for i in 0..<str.count {
+        expandRangeIn(str: str, start: i, end: i)
+        expandRangeIn(str: str, start: i, end: i + 1)
+    }
+    return str[resultStart..<(resultStart + resultLength)]
+}
+
+func expandRangeIn(str: String,  start: Int,  end: Int) {
+    var start = start
+    var end = end
+    while start >= 0, end < str.count, str[start] == str[end] {
+        start -= 1
+        end += 1
+    }
+    if resultLength < (end - start - 1) {
+        resultStart = start + 1
+        resultLength = end - start - 1
+    }
+    
+}
+
+getPalindromeSubString(from: "forgeeksskeegfor")
