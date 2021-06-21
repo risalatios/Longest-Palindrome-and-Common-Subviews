@@ -1,0 +1,15 @@
+//-- Get pair from array whose sum is equal to key ---  achieved using map
+//Given an array A[] and a number x, check for pair in A[] with sum as x
+let arr = [0, -1, 2, -3, 1]
+let sum = -2
+
+var dic: [Int: Int] = [:]
+
+for item in arr {
+    let diff = sum - item
+    if dic[diff] == 1 {
+        print(diff, item)
+    }
+    dic[item] = 1
+    
+}
